@@ -180,49 +180,41 @@
     </div>
 
     <script>
-        // Configuration
+        // Core Configuration
         const CONFIG = {
+            // Animation settings
+            ANIMATION: {
+                SPAWN_RATE: 0.1,
+                PARTICLE_COUNT: 140
+            },
+            
+            // Particle appearance and behavior
             PARTICLE: {
-                COUNT: 140,           // Number of particles to pre-populate
-                SIZE: {
-                    MIN: 2.5,
-                    MAX: 4,
-                    VARIANCE: 0
-                },
-                SPEED: {
-                    BASE: 0.001,
-                    MIN: 0.0005,
-                    MAX: 0.002,
-                    VARIANCE: 0.001
-                },
+                SIZE: 3,
+                SPEED: 0.001,
                 ALPHA: 0.8,
                 COLOR: '34, 103, 71',
                 PATH_VARIANCE: {
-                    MAX: 15,         // Maximum pixels of deviation from path
-                    INTERSECTION: 0.7 // How much more variance to apply in intersection area
+                    MAX: 15,
+                    INTERSECTION: 1
                 }
             },
+            
+            // Curve appearance and shape
             CURVE: {
-                EDGE_OFFSET: 20,
-                LINE_SPACING: 140,
-                LINE_WIDTH: 1,
+                EDGE_OFFSET: 10,
+                LINE_SPACING: 60,
+                LINE_WIDTH: 2,
                 COLOR: '#226747',
-                THICKNESS: 260,      // Total gap between curves at intersection point
+                THICKNESS: 100,
                 CONTROL_POINTS: {
-                    OUTER: {
-                        START: 0.25,
-                        END: 0.75
-                    },
-                    INNER: {
-                        START: 0.25,
-                        END: 0.75
-                    }
+                    OUTER: { START: 0.75, END: 0.25 },
+                    INNER: { START: 0.8, END: 0.2 }
                 }
-            },
-            SPAWN_RATE: 0.3
+            }
         };
 
-        // Utility Functions
+        // Bezier curve utilities
         const BezierUtils = {
             getPoint(t, startX, startY, cp1x, cp1y, cp2x, cp2y, endX, endY) {
                 const t1 = 1 - t;
@@ -251,41 +243,27 @@
             }
         };
 
-        // Particle Class
+        // Particle class for managing individual particles
         class Particle {
             constructor(x, y, progress = 0, ratio = Math.random()) {
                 this.x = x;
                 this.y = y;
                 this.progress = progress;
                 this.ratio = ratio;
-                
-                // Add random offset for path variance
                 this.pathOffset = Math.random() * Math.PI * 2;
-                
                 this.initializeProperties();
             }
 
             initializeProperties() {
-                // Size
-                this.size = CONFIG.PARTICLE.SIZE.MIN + 
-                    Math.random() * (CONFIG.PARTICLE.SIZE.MAX - CONFIG.PARTICLE.SIZE.MIN);
-                this.size += (Math.random() - 0.5) * CONFIG.PARTICLE.SIZE.VARIANCE;
-                
-                // Speed
-                const speedBase = CONFIG.PARTICLE.SPEED.BASE;
-                const speedVariance = (Math.random() - 0.5) * CONFIG.PARTICLE.SPEED.VARIANCE;
-                this.speed = Math.max(
-                    CONFIG.PARTICLE.SPEED.MIN,
-                    Math.min(CONFIG.PARTICLE.SPEED.MAX, speedBase + speedVariance)
-                );
-                
-                // Alpha
+                this.size = CONFIG.PARTICLE.SIZE;
+                this.speed = CONFIG.PARTICLE.SPEED;
                 this.alpha = CONFIG.PARTICLE.ALPHA;
             }
 
             update() {
                 this.progress += this.speed;
                 
+                // Get positions on both curves
                 const outer = BezierUtils.getPoint(
                     this.progress,
                     AnimationState.curvePoints.startX,
@@ -297,6 +275,7 @@
                     AnimationState.curvePoints.endX,
                     AnimationState.curvePoints.endY
                 );
+                
                 const inner = BezierUtils.getPoint(
                     this.progress,
                     AnimationState.curvePoints.startX2,
@@ -309,18 +288,15 @@
                     AnimationState.curvePoints.endY
                 );
                 
-                // Calculate base position
+                // Calculate base position between curves
                 const baseX = outer.x + (inner.x - outer.x) * this.ratio;
                 const baseY = outer.y + (inner.y - outer.y) * this.ratio;
 
-                // Calculate intersection factor (0 to 1)
+                // Add path variance
                 const intersectionFactor = Math.sin(this.progress * Math.PI);
-                
-                // Calculate path variance based on intersection
                 const varianceAmount = CONFIG.PARTICLE.PATH_VARIANCE.MAX * 
                     (1 + intersectionFactor * CONFIG.PARTICLE.PATH_VARIANCE.INTERSECTION);
                 
-                // Add smooth path variance
                 const pathPhase = this.progress * Math.PI * 2 + this.pathOffset;
                 this.x = baseX + Math.sin(pathPhase) * varianceAmount;
                 this.y = baseY + Math.cos(pathPhase) * varianceAmount;
@@ -338,7 +314,7 @@
             }
         }
 
-        // Animation State
+        // Global animation state
         const AnimationState = {
             particles: [],
             animationId: null,
@@ -350,15 +326,14 @@
             }
         };
 
-        // Drawing Functions
+        // Drawing utilities
         const DrawingUtils = {
             prePopulateParticles() {
-                for (let i = 0; i < CONFIG.PARTICLE.COUNT; i++) {
+                for (let i = 0; i < CONFIG.ANIMATION.PARTICLE_COUNT; i++) {
                     const progress = Math.random();
                     const ratio = Math.random();
                     
-                    const outer = BezierUtils.getPoint(
-                        progress,
+                    const point = BezierUtils.getRandomPoint(
                         AnimationState.curvePoints.startX,
                         AnimationState.curvePoints.startY,
                         AnimationState.curvePoints.cp1x,
@@ -366,25 +341,11 @@
                         AnimationState.curvePoints.cp2x,
                         AnimationState.curvePoints.cp2y,
                         AnimationState.curvePoints.endX,
-                        AnimationState.curvePoints.endY
-                    );
-                    const inner = BezierUtils.getPoint(
-                        progress,
-                        AnimationState.curvePoints.startX2,
-                        AnimationState.curvePoints.startY,
-                        AnimationState.curvePoints.cp1x2,
-                        AnimationState.curvePoints.cp1y2,
-                        AnimationState.curvePoints.cp2x2,
-                        AnimationState.curvePoints.cp2y2,
-                        AnimationState.curvePoints.endX2,
-                        AnimationState.curvePoints.endY
+                        AnimationState.curvePoints.endY,
+                        ratio
                     );
                     
-                    const x = outer.x + (inner.x - outer.x) * ratio;
-                    const y = outer.y + (inner.y - outer.y) * ratio;
-                    
-                    const particle = new Particle(x, y, progress, ratio);
-                    AnimationState.particles.push(particle);
+                    AnimationState.particles.push(new Particle(point.x, point.y, progress, ratio));
                 }
             },
 
@@ -404,22 +365,21 @@
                 const rightRect = sectionRight.getBoundingClientRect();
                 const contentRect = contentSections.getBoundingClientRect();
 
-                // Set curve points with edge offset
+                // Set curve points
                 AnimationState.curvePoints.startX = leftRect.left - contentRect.left + CONFIG.CURVE.EDGE_OFFSET;
                 AnimationState.curvePoints.startY = leftRect.top - contentRect.top;
                 AnimationState.curvePoints.endX = rightRect.right - contentRect.left - CONFIG.CURVE.EDGE_OFFSET;
                 AnimationState.curvePoints.endY = rightRect.bottom - contentRect.top;
 
                 const ctx = canvas.getContext('2d');
-                const thicknessOffset = CONFIG.CURVE.THICKNESS / 2;
                 
                 // Draw outer curve
                 AnimationState.curvePoints.cp1x = AnimationState.curvePoints.startX + 
                     (AnimationState.curvePoints.endX - AnimationState.curvePoints.startX) * CONFIG.CURVE.CONTROL_POINTS.OUTER.START;
-                AnimationState.curvePoints.cp1y = AnimationState.curvePoints.endY;
+                AnimationState.curvePoints.cp1y = AnimationState.curvePoints.startY;
                 AnimationState.curvePoints.cp2x = AnimationState.curvePoints.startX + 
                     (AnimationState.curvePoints.endX - AnimationState.curvePoints.startX) * CONFIG.CURVE.CONTROL_POINTS.OUTER.END;
-                AnimationState.curvePoints.cp2y = AnimationState.curvePoints.startY;
+                AnimationState.curvePoints.cp2y = AnimationState.curvePoints.endY;
 
                 ctx.beginPath();
                 ctx.moveTo(AnimationState.curvePoints.startX, AnimationState.curvePoints.startY);
@@ -438,10 +398,12 @@
 
                 AnimationState.curvePoints.cp1x2 = AnimationState.curvePoints.startX2 + 
                     (AnimationState.curvePoints.endX2 - AnimationState.curvePoints.startX2) * CONFIG.CURVE.CONTROL_POINTS.INNER.START;
-                AnimationState.curvePoints.cp1y2 = AnimationState.curvePoints.endY + thicknessOffset;
+                AnimationState.curvePoints.cp1y2 = AnimationState.curvePoints.startY + 
+                    (AnimationState.curvePoints.endY - AnimationState.curvePoints.startY) * 0.5;
                 AnimationState.curvePoints.cp2x2 = AnimationState.curvePoints.startX2 + 
                     (AnimationState.curvePoints.endX2 - AnimationState.curvePoints.startX2) * CONFIG.CURVE.CONTROL_POINTS.INNER.END;
-                AnimationState.curvePoints.cp2y2 = AnimationState.curvePoints.startY - thicknessOffset;
+                AnimationState.curvePoints.cp2y2 = AnimationState.curvePoints.startY + 
+                    (AnimationState.curvePoints.endY - AnimationState.curvePoints.startY) * 0.5;
 
                 ctx.beginPath();
                 ctx.moveTo(AnimationState.curvePoints.startX2, AnimationState.curvePoints.startY);
@@ -454,7 +416,7 @@
             }
         };
 
-        // Animation Loop
+        // Animation loop
         function animate() {
             const canvas = document.querySelector('.connection-canvas');
             const ctx = canvas.getContext('2d');
@@ -462,7 +424,7 @@
 
             DrawingUtils.drawConnection();
 
-            if (Math.random() < CONFIG.SPAWN_RATE) {
+            if (Math.random() < CONFIG.ANIMATION.SPAWN_RATE) {
                 const point = BezierUtils.getRandomPoint(
                     AnimationState.curvePoints.startX,
                     AnimationState.curvePoints.startY,
@@ -492,7 +454,7 @@
             AnimationState.animationId = requestAnimationFrame(animate);
         }
 
-        // Event Listeners
+        // Event listeners
         window.addEventListener('load', () => {
             DrawingUtils.drawConnection();
             DrawingUtils.prePopulateParticles();
