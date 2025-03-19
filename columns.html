@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching Your Needs with Our Strengths</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: rgb(253, 250, 243);
+            color: #000;
+            line-height: 1.5;
+            min-height: 100vh;
+            padding: 4rem;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .content-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 600;
+            margin-bottom: 4rem;
+        }
+
+        /* Feature Sections */
+        .section-left, .section-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-left { align-items: flex-end; }
+        .section-right { align-items: flex-start; }
+
+        .feature {
+            max-width: 60vw;
+            width: 420px;
+        }
+
+        .feature h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .feature p {
+            font-size: 1.125rem;
+            color: #333;
+        }
+
+        /* Visual Elements */
+        .connection-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .gradient-overlay {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .gradient-overlay.top {
+            top: 0;
+            background: linear-gradient(to bottom, 
+                rgba(253, 250, 243, 1) 0%,
+                rgba(253, 250, 243, 0.9) 30%,
+                rgba(253, 250, 243, 0.1) 75%,
+                rgba(253, 250, 243, 0) 100%
+            );
+        }
+
+        .gradient-overlay.bottom {
+            bottom: 0;
+            background: linear-gradient(to top, 
+                rgba(253, 250, 243, 1) 0%,
+                rgba(253, 250, 243, 0.9) 30%,
+                rgba(253, 250, 243, 0.1) 75%,
+                rgba(253, 250, 243, 0) 100%
+            );
+        }
+
+        /* CTA Button */
+        .cta-button {
+            display: inline-block;
+            background: #E8F5E9;
+            color: #000;
+            text-decoration: none;
+            padding: 0.6rem 2rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            font-size: 1.5rem;
+        }
+
+        .cta-button:hover {
+            background: #C8E6C9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body { padding: 2rem; }
+            h1 { 
+                font-size: 2.5rem;
+                margin-bottom: 2rem;
+            }
+            .content-sections {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            .feature { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Matching Your Needs<br>with Our Strengths</h1>
+        
+        <div class="content-sections">
+            <canvas class="connection-canvas"></canvas>
+            <div class="gradient-overlay top"></div>
+            <div class="gradient-overlay bottom"></div>
+            
+            <div class="section-left">
+                <div class="feature">
+                    <h2>Committed Partners</h2>
+                    <p>We maintain a specialized, flexible structure that prioritizes dedicated time with our experts.</p>
+                </div>
+                <div class="feature">
+                    <h2>Versatile Veterans</h2>
+                    <p>We leverage our operational, advisory, and legal backgrounds to offer a unique perspective and more practical approach to strategic planning.</p>
+                </div>
+            </div>
+            
+            <div class="section-right">
+                <div class="feature">
+                    <h2>Comprehensive Planners</h2>
+                    <p>We deliver results from blueprint development through post-implementation calibration.</p>
+                </div>
+                <div class="feature">
+                    <h2>Visionary Thinkers</h2>
+                    <p>We cultivate long-term, trusting relationships rather than conducting short-term, transactional projects.</p>
+                </div>
+            </div>
+        </div>
+
+        <a href="#" class="cta-button">Learn more about us →</a>
+    </div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            PARTICLE: {
+                COUNT: 140,           // Number of particles to pre-populate
+                SIZE: {
+                    MIN: 2.5,
+                    MAX: 4,
+                    VARIANCE: 0
+                },
+                SPEED: {
+                    BASE: 0.001,
+                    MIN: 0.0005,
+                    MAX: 0.002,
+                    VARIANCE: 0.001
+                },
+                ALPHA: 0.8,
+                COLOR: '34, 103, 71',
+                PATH_VARIANCE: {
+                    MAX: 15,         // Maximum pixels of deviation from path
+                    INTERSECTION: 0.7 // How much more variance to apply in intersection area
+                }
+            },
+            CURVE: {
+                EDGE_OFFSET: 20,
+                LINE_SPACING: 140,
+                LINE_WIDTH: 1,
+                COLOR: '#226747',
+                THICKNESS: 260,      // Total gap between curves at intersection point
+                CONTROL_POINTS: {
+                    OUTER: {
+                        START: 0.25,
+                        END: 0.75
+                    },
+                    INNER: {
+                        START: 0.25,
+                        END: 0.75
+                    }
+                }
+            },
+            SPAWN_RATE: 0.3
+        };
+
+        // Utility Functions
+        const BezierUtils = {
+            getPoint(t, startX, startY, cp1x, cp1y, cp2x, cp2y, endX, endY) {
+                const t1 = 1 - t;
+                return {
+                    x: t1 * t1 * t1 * startX + 3 * t1 * t1 * t * cp1x + 3 * t1 * t * t * cp2x + t * t * t * endX,
+                    y: t1 * t1 * t1 * startY + 3 * t1 * t1 * t * cp1y + 3 * t1 * t * t * cp2y + t * t * t * endY
+                };
+            },
+
+            getRandomPoint(startX, startY, cp1x, cp1y, cp2x, cp2y, endX, endY, ratio) {
+                const point = this.getPoint(0, startX, startY, cp1x, cp1y, cp2x, cp2y, endX, endY);
+                const point2 = this.getPoint(0, 
+                    AnimationState.curvePoints.startX2,
+                    AnimationState.curvePoints.startY,
+                    AnimationState.curvePoints.cp1x2,
+                    AnimationState.curvePoints.cp1y2,
+                    AnimationState.curvePoints.cp2x2,
+                    AnimationState.curvePoints.cp2y2,
+                    AnimationState.curvePoints.endX2,
+                    AnimationState.curvePoints.endY
+                );
+                return {
+                    x: point.x + (point2.x - point.x) * ratio,
+                    y: point.y + (point2.y - point.y) * ratio
+                };
+            }
+        };
+
+        // Particle Class
+        class Particle {
+            constructor(x, y, progress = 0, ratio = Math.random()) {
+                this.x = x;
+                this.y = y;
+                this.progress = progress;
+                this.ratio = ratio;
+                
+                // Add random offset for path variance
+                this.pathOffset = Math.random() * Math.PI * 2;
+                
+                this.initializeProperties();
+            }
+
+            initializeProperties() {
+                // Size
+                this.size = CONFIG.PARTICLE.SIZE.MIN + 
+                    Math.random() * (CONFIG.PARTICLE.SIZE.MAX - CONFIG.PARTICLE.SIZE.MIN);
+                this.size += (Math.random() - 0.5) * CONFIG.PARTICLE.SIZE.VARIANCE;
+                
+                // Speed
+                const speedBase = CONFIG.PARTICLE.SPEED.BASE;
+                const speedVariance = (Math.random() - 0.5) * CONFIG.PARTICLE.SPEED.VARIANCE;
+                this.speed = Math.max(
+                    CONFIG.PARTICLE.SPEED.MIN,
+                    Math.min(CONFIG.PARTICLE.SPEED.MAX, speedBase + speedVariance)
+                );
+                
+                // Alpha
+                this.alpha = CONFIG.PARTICLE.ALPHA;
+            }
+
+            update() {
+                this.progress += this.speed;
+                
+                const outer = BezierUtils.getPoint(
+                    this.progress,
+                    AnimationState.curvePoints.startX,
+                    AnimationState.curvePoints.startY,
+                    AnimationState.curvePoints.cp1x,
+                    AnimationState.curvePoints.cp1y,
+                    AnimationState.curvePoints.cp2x,
+                    AnimationState.curvePoints.cp2y,
+                    AnimationState.curvePoints.endX,
+                    AnimationState.curvePoints.endY
+                );
+                const inner = BezierUtils.getPoint(
+                    this.progress,
+                    AnimationState.curvePoints.startX2,
+                    AnimationState.curvePoints.startY,
+                    AnimationState.curvePoints.cp1x2,
+                    AnimationState.curvePoints.cp1y2,
+                    AnimationState.curvePoints.cp2x2,
+                    AnimationState.curvePoints.cp2y2,
+                    AnimationState.curvePoints.endX2,
+                    AnimationState.curvePoints.endY
+                );
+                
+                // Calculate base position
+                const baseX = outer.x + (inner.x - outer.x) * this.ratio;
+                const baseY = outer.y + (inner.y - outer.y) * this.ratio;
+
+                // Calculate intersection factor (0 to 1)
+                const intersectionFactor = Math.sin(this.progress * Math.PI);
+                
+                // Calculate path variance based on intersection
+                const varianceAmount = CONFIG.PARTICLE.PATH_VARIANCE.MAX * 
+                    (1 + intersectionFactor * CONFIG.PARTICLE.PATH_VARIANCE.INTERSECTION);
+                
+                // Add smooth path variance
+                const pathPhase = this.progress * Math.PI * 2 + this.pathOffset;
+                this.x = baseX + Math.sin(pathPhase) * varianceAmount;
+                this.y = baseY + Math.cos(pathPhase) * varianceAmount;
+            }
+
+            draw(ctx) {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${CONFIG.PARTICLE.COLOR}, ${this.alpha})`;
+                ctx.fill();
+            }
+
+            isComplete() {
+                return this.progress >= 1;
+            }
+        }
+
+        // Animation State
+        const AnimationState = {
+            particles: [],
+            animationId: null,
+            curvePoints: {
+                startX: 0, startY: 0, endX: 0, endY: 0,
+                cp1x: 0, cp1y: 0, cp2x: 0, cp2y: 0,
+                startX2: 0, endX2: 0,
+                cp1x2: 0, cp1y2: 0, cp2x2: 0, cp2y2: 0
+            }
+        };
+
+        // Drawing Functions
+        const DrawingUtils = {
+            prePopulateParticles() {
+                for (let i = 0; i < CONFIG.PARTICLE.COUNT; i++) {
+                    const progress = Math.random();
+                    const ratio = Math.random();
+                    
+                    const outer = BezierUtils.getPoint(
+                        progress,
+                        AnimationState.curvePoints.startX,
+                        AnimationState.curvePoints.startY,
+                        AnimationState.curvePoints.cp1x,
+                        AnimationState.curvePoints.cp1y,
+                        AnimationState.curvePoints.cp2x,
+                        AnimationState.curvePoints.cp2y,
+                        AnimationState.curvePoints.endX,
+                        AnimationState.curvePoints.endY
+                    );
+                    const inner = BezierUtils.getPoint(
+                        progress,
+                        AnimationState.curvePoints.startX2,
+                        AnimationState.curvePoints.startY,
+                        AnimationState.curvePoints.cp1x2,
+                        AnimationState.curvePoints.cp1y2,
+                        AnimationState.curvePoints.cp2x2,
+                        AnimationState.curvePoints.cp2y2,
+                        AnimationState.curvePoints.endX2,
+                        AnimationState.curvePoints.endY
+                    );
+                    
+                    const x = outer.x + (inner.x - outer.x) * ratio;
+                    const y = outer.y + (inner.y - outer.y) * ratio;
+                    
+                    const particle = new Particle(x, y, progress, ratio);
+                    AnimationState.particles.push(particle);
+                }
+            },
+
+            drawConnection() {
+                const canvas = document.querySelector('.connection-canvas');
+                const contentSections = document.querySelector('.content-sections');
+                const sectionLeft = document.querySelector('.section-left');
+                const sectionRight = document.querySelector('.section-right');
+
+                // Set canvas size
+                const rect = contentSections.getBoundingClientRect();
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+
+                // Calculate positions
+                const leftRect = sectionLeft.getBoundingClientRect();
+                const rightRect = sectionRight.getBoundingClientRect();
+                const contentRect = contentSections.getBoundingClientRect();
+
+                // Set curve points with edge offset
+                AnimationState.curvePoints.startX = leftRect.left - contentRect.left + CONFIG.CURVE.EDGE_OFFSET;
+                AnimationState.curvePoints.startY = leftRect.top - contentRect.top;
+                AnimationState.curvePoints.endX = rightRect.right - contentRect.left - CONFIG.CURVE.EDGE_OFFSET;
+                AnimationState.curvePoints.endY = rightRect.bottom - contentRect.top;
+
+                const ctx = canvas.getContext('2d');
+                const thicknessOffset = CONFIG.CURVE.THICKNESS / 2;
+                
+                // Draw outer curve
+                AnimationState.curvePoints.cp1x = AnimationState.curvePoints.startX + 
+                    (AnimationState.curvePoints.endX - AnimationState.curvePoints.startX) * CONFIG.CURVE.CONTROL_POINTS.OUTER.START;
+                AnimationState.curvePoints.cp1y = AnimationState.curvePoints.endY;
+                AnimationState.curvePoints.cp2x = AnimationState.curvePoints.startX + 
+                    (AnimationState.curvePoints.endX - AnimationState.curvePoints.startX) * CONFIG.CURVE.CONTROL_POINTS.OUTER.END;
+                AnimationState.curvePoints.cp2y = AnimationState.curvePoints.startY;
+
+                ctx.beginPath();
+                ctx.moveTo(AnimationState.curvePoints.startX, AnimationState.curvePoints.startY);
+                ctx.bezierCurveTo(
+                    AnimationState.curvePoints.cp1x, AnimationState.curvePoints.cp1y,
+                    AnimationState.curvePoints.cp2x, AnimationState.curvePoints.cp2y,
+                    AnimationState.curvePoints.endX, AnimationState.curvePoints.endY
+                );
+                ctx.strokeStyle = CONFIG.CURVE.COLOR;
+                ctx.lineWidth = CONFIG.CURVE.LINE_WIDTH;
+                ctx.stroke();
+
+                // Draw inner curve
+                AnimationState.curvePoints.startX2 = AnimationState.curvePoints.startX + CONFIG.CURVE.LINE_SPACING;
+                AnimationState.curvePoints.endX2 = AnimationState.curvePoints.endX - CONFIG.CURVE.LINE_SPACING;
+
+                AnimationState.curvePoints.cp1x2 = AnimationState.curvePoints.startX2 + 
+                    (AnimationState.curvePoints.endX2 - AnimationState.curvePoints.startX2) * CONFIG.CURVE.CONTROL_POINTS.INNER.START;
+                AnimationState.curvePoints.cp1y2 = AnimationState.curvePoints.endY + thicknessOffset;
+                AnimationState.curvePoints.cp2x2 = AnimationState.curvePoints.startX2 + 
+                    (AnimationState.curvePoints.endX2 - AnimationState.curvePoints.startX2) * CONFIG.CURVE.CONTROL_POINTS.INNER.END;
+                AnimationState.curvePoints.cp2y2 = AnimationState.curvePoints.startY - thicknessOffset;
+
+                ctx.beginPath();
+                ctx.moveTo(AnimationState.curvePoints.startX2, AnimationState.curvePoints.startY);
+                ctx.bezierCurveTo(
+                    AnimationState.curvePoints.cp1x2, AnimationState.curvePoints.cp1y2,
+                    AnimationState.curvePoints.cp2x2, AnimationState.curvePoints.cp2y2,
+                    AnimationState.curvePoints.endX2, AnimationState.curvePoints.endY
+                );
+                ctx.stroke();
+            }
+        };
+
+        // Animation Loop
+        function animate() {
+            const canvas = document.querySelector('.connection-canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            DrawingUtils.drawConnection();
+
+            if (Math.random() < CONFIG.SPAWN_RATE) {
+                const point = BezierUtils.getRandomPoint(
+                    AnimationState.curvePoints.startX,
+                    AnimationState.curvePoints.startY,
+                    AnimationState.curvePoints.cp1x,
+                    AnimationState.curvePoints.cp1y,
+                    AnimationState.curvePoints.cp2x,
+                    AnimationState.curvePoints.cp2y,
+                    AnimationState.curvePoints.endX,
+                    AnimationState.curvePoints.endY,
+                    Math.random()
+                );
+                AnimationState.particles.push(new Particle(point.x, point.y));
+            }
+
+            for (let i = AnimationState.particles.length - 1; i >= 0; i--) {
+                const particle = AnimationState.particles[i];
+                particle.update();
+                
+                if (particle.isComplete()) {
+                    AnimationState.particles.splice(i, 1);
+                    continue;
+                }
+                
+                particle.draw(ctx);
+            }
+
+            AnimationState.animationId = requestAnimationFrame(animate);
+        }
+
+        // Event Listeners
+        window.addEventListener('load', () => {
+            DrawingUtils.drawConnection();
+            DrawingUtils.prePopulateParticles();
+            animate();
+        });
+
+        window.addEventListener('resize', () => {
+            AnimationState.particles.length = 0;
+            if (AnimationState.animationId) {
+                cancelAnimationFrame(AnimationState.animationId);
+            }
+            DrawingUtils.drawConnection();
+            DrawingUtils.prePopulateParticles();
+            animate();
+        });
+    </script>
+</body>
+</html> 
