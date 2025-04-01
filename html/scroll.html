@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustWorks - Healthcare Solutions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #FDFAF3;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: rgba(253, 250, 243, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .hero-section {
+            position: relative;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .waves {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 50%;
+            bottom: 0;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            padding: 2rem;
+            text-align: left;
+            margin-left: calc((100% - 1200px) / 2 + 2rem);
+        }
+
+        @media (max-width: 1200px) {
+            .hero-content {
+                margin-left: 2rem;
+            }
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: #195019;
+            text-align: left;
+        }
+
+        .hero-content p {
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            color: #195019;
+            text-align: left;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 4rem;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 2;
+            background: #FDFAF3;
+        }
+
+        .left-column {
+            flex: 1;
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .right-column {
+            flex: 1;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #195019;
+        }
+
+        .section p {
+            margin-bottom: 1rem;
+        }
+
+        .service-list {
+            list-style: none;
+        }
+
+        .service-list li {
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+        }
+
+        .service-list li::before {
+            content: "○";
+            margin-right: 0.5rem;
+            color: #195019;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: #195019;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #2a752a;
+        }
+
+        .circle-graphic {
+            width: 300px;
+            height: 300px;
+            margin: 2rem 0;
+            border: none;
+            background: transparent;
+        }
+
+        .strategy-section {
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="container">
+            <img src="logo.png" alt="TrustWorks Logo" height="40">
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="waves"></div>
+        <div class="hero-content">
+            <h1>Solutions Built for Healthcare Leaders, by Industry Experts</h1>
+            <p>Trust Us to Eliminate the Noise, from Boardroom to Bedside</p>
+            <a href="#" class="btn">Schedule a Conversation</a>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="left-column">
+                <div class="strategy-section">
+                    <h2>From Strategy to Impact</h2>
+                    <p>As former healthcare executives and operational leaders, we focus on delivering actionable, measurable strategies that drive progress, creating immediate impact and building a foundation for the future.</p>
+                    <iframe src="ring.html" class="circle-graphic" scrolling="no"></iframe>
+                </div>
+            </div>
+
+            <div class="right-column">
+                <section class="section">
+                    <h2>Integrated Organizational Design</h2>
+                    <p>We align governance, leadership, and operational structures to foster collaboration, enhance efficiency, and create a high-performing healthcare ecosystem.</p>
+                    <ul class="service-list">
+                        <li>Organizational Strategy</li>
+                        <li>Governance Modernization & Assessment</li>
+                        <li>Enterprise Structural Design</li>
+                        <li>MSOs & Population Health Platforms</li>
+                        <li>M&A & Affiliation Support</li>
+                        <li>Service Line Planning</li>
+                    </ul>
+                </section>
+
+                <section class="section">
+                    <h2>Care Model Innovation</h2>
+                    <p>By reconfiguring care delivery, we design innovative, patient-centered solutions that improve outcomes, enhance provider experience, and drive operational excellence.</p>
+                    <ul class="service-list">
+                        <li>Care Model Design</li>
+                        <li>Primary & Specialty Care Development</li>
+                        <li>Population Health Management</li>
+                        <li>PSAs & Co-Management Agreements</li>
+                        <li>Digital Health Strategy</li>
+                        <li>Access Improvement Initiatives</li>
+                    </ul>
+                </section>
+
+                <section class="section">
+                    <h2>Sustainable & Resilient Economics</h2>
+                    <p>We develop financial strategies that balance clinical and business priorities, ensuring long-term growth, stability, and adaptability in an evolving healthcare landscape.</p>
+                    <ul class="service-list">
+                        <li>Business Model Transformation</li>
+                        <li>Economic Performance Assessment</li>
+                        <li>Physician Compensation Design & Implementation</li>
+                        <li>Financial Affiliations & Gainsharing</li>
+                        <li>Market Growth & Analysis</li>
+                        <li>Miscellaneous Financial Models</li>
+                    </ul>
+                </section>
+
+                <section class="section">
+                    <h2>Corporate Services</h2>
+                    <p>We offer a variety of customized services tailored to meet your organization's unique needs. With our extensive experience and collaborative approach, we work closely with you to craft solutions that drive meaningful impact and deliver lasting results.</p>
+                    <ul class="service-list">
+                        <li>Performance Alignment</li>
+                        <li>Corporate Advisory Services</li>
+                        <li>Retreat Facilitation</li>
+                        <li>Interim Management Services</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 4rem 0;">
+            <h2>Are you interested in partnering with our experts to build lasting solutions?</h2>
+            <a href="#" class="btn" style="margin-top: 1rem;">Schedule a Conversation</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bsehovac/shader-program/ShaderProgram.js"></script>
+
+    <script>
+        const config = {
+            pointSize: 3.5,
+            colors: {
+                start: { r: 0.1, g: 0.5, b: 0.1, a: 1 },    // Darker green
+                end: { r: 0, g: 0.9, b: 0.2, a: 1 }         // Brighter green
+            },
+            backgroundColor: { r: 0.992, g: 0.98, b: 0.953 }, // #FDFAF3 in RGB
+            speed: 2,
+            waveHeight: 1.5,
+            wavePeaks: 4,
+            pointDensity: 5,
+            waveDepth: 200
+        }
+
+        const pointSize = config.pointSize
+
+        const waves = new ShaderProgram(document.querySelector('.waves'), {
+            texture: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAb1BMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8v0wLRAAAAJHRSTlMAC/goGvDhmwcExrVjWzrm29TRqqSKenRXVklANSIUE8mRkGpv+HOfAAABCElEQVQ4y4VT13LDMAwLrUHteO+R9f/fWMfO6dLaPeKVEECRxOULWsEGpS9nULDwia2Y+ALqUNbAWeg775zv+sA4/FFRMxt8U2FZFCVWjR/YrH4/H9sarclSKdPMWKzb8VsEeHB3m0shkhVCyNzeXeAQ9Xl4opEieX2QCGnwGbj6GMyjw9t1K0fK9YZunPXeAGsfJtYjwzxaBnozGGorYz0ypK2HzQSYx1y8DgSRo2ewOiyh2QWOEk1Y9OrQV0a8TiBM1a8eMHWYnRMy7CZ4t1CmyRkhSUvP3gRXyHOCLBxNoC3IJv//ZrJ/kxxUHPUB+6jJZZHrpg6GOjnqaOmzp4NDR48OLxn/H27SRQ08S0ZJAAAAAElFTkSuQmCC',
+            uniforms: {
+                size: { type: 'float', value: pointSize },
+                field: { type: 'vec3', value: [0, 0, 0] },
+                speed: { type: 'float', value: config.speed },
+                backgroundColor: { type: 'vec3', value: [config.backgroundColor.r, config.backgroundColor.g, config.backgroundColor.b] },
+                wavePeaks: { type: 'float', value: config.wavePeaks },
+            },
+            vertex: `
+    #define M_PI 3.1415926535897932384626433832795
+
+    precision highp float;
+
+    attribute vec4 a_position;
+    attribute vec4 a_color;
+
+    uniform float u_time;
+    uniform float u_size;
+    uniform float u_speed;
+    uniform vec3 u_field;
+    uniform mat4 u_projection;
+    uniform float u_wavePeaks;
+
+    varying vec4 v_color;
+
+    void main() {
+
+      vec3 pos = a_position.xyz;
+
+      pos.y += (
+        cos(pos.x / u_field.x * M_PI * u_wavePeaks + u_time * u_speed) +
+        sin(pos.z / u_field.z * M_PI * u_wavePeaks + u_time * u_speed)
+      ) * u_field.y;
+
+      gl_Position = u_projection * vec4( pos.xyz, a_position.w );
+      gl_PointSize = ( u_size / gl_Position.w ) * 100.0;
+
+      v_color = a_color;
+
+    }`,
+            fragment: `
+    precision highp float;
+
+    uniform sampler2D u_texture;
+    uniform vec3 backgroundColor;
+
+    varying vec4 v_color;
+
+    void main() {
+      vec4 texColor = texture2D(u_texture, gl_PointCoord);
+      vec3 particleColor = mix(backgroundColor, v_color.rgb, texColor.a * v_color.a);
+      gl_FragColor = vec4(particleColor, texColor.a * v_color.a);
+    }`,
+            onResize(w, h, dpi) {
+                const position = [], color = []
+
+                const width = 400 * (w / h)
+                const depth = config.waveDepth
+                const height = config.waveHeight
+                const distance = config.pointDensity
+
+                for (let x = 0; x < width; x += distance) {
+                    for (let z = 0; z < depth; z += distance) {
+                        position.push(- width / 2 + x, -30, -depth / 2 + z)
+                        const ratio = x / width;
+                        const r = config.colors.start.r + (config.colors.end.r - config.colors.start.r) * ratio;
+                        const g = config.colors.start.g + (config.colors.end.g - config.colors.start.g) * ratio;
+                        const b = config.colors.start.b + (config.colors.end.b - config.colors.start.b) * ratio;
+                        const a = (z / depth);
+                        color.push(r, g, b, a);
+                    }
+                }
+
+                this.uniforms.field = [width, height, depth]
+                this.uniforms.wavePeaks = config.wavePeaks
+                this.uniforms.speed = config.speed
+
+                this.buffers.position = position
+                this.buffers.color = color
+
+                this.uniforms.size = (h / 400) * pointSize * dpi
+            },
+        })
+    </script>
+</body>
+</html>
