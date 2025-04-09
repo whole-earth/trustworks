@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smooth Pyramid Animation</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      height: 300vh;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      overflow-x: hidden;
+    }
+    
+    .scroll-text {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 18px;
+      color: #333;
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 10px;
+      border-radius: 5px;
+      z-index: 100;
+    }
+    
+    .pyramid-container {
+      position: fixed;
+      top: 60vh;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      height: 346.41px;
+      perspective: 1000px;
+    }
+    
+    .row {
+      position: absolute;
+      display: flex;
+      width: 100%;
+    }
+    
+    .shape {
+      height: 86.6px;
+      background-color: transparent;
+      background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdHRlcm4gaWQ9ImRvdHMiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHBhdHRlcm5UcmFuc2Zvcm09InRyYW5zbGF0ZSgtMywtMykiPjxjaXJjbGUgY3g9IjMiIGN5PSIzIiByPSIyIiBmaWxsPSIjNmFjNzY3Ii8+PC9wYXR0ZXJuPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZG90cykiLz48L3N2Zz4=");
+      transition: transform 0.4s ease-out;
+    }
+    
+    /* Bottom row */
+    .row--bottom {
+      bottom: 0;
+      width: 100%;
+    }
+    
+    .row--bottom .shape {
+      width: 25%;
+    }
+    
+    .shape--bottom-left {
+      clip-path: polygon(0 100%, 100% 100%, 100% 0, 50% 0);
+    }
+    
+    .shape--bottom-center {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+    
+    .shape--bottom-right {
+      clip-path: polygon(0 0, 50% 0, 100% 100%, 0 100%);
+    }
+    
+    /* Middle-bottom row */
+    .row--middle-bottom {
+      bottom: 86.6px;
+      width: 75%;
+      left: 12.5%;
+    }
+    
+    .row--middle-bottom .shape {
+      width: 33.333%;
+    }
+    
+    .shape--middle-left {
+      clip-path: polygon(100% 100%, 0 100%, 50% 0, 100% 0);
+    }
+    
+    .shape--middle-center {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+    
+    .shape--middle-right {
+      clip-path: polygon(100% 100%, 0 100%, 0 0, 50% 0);
+    }
+    
+    /* Middle-top row */
+    .row--middle-top {
+      bottom: 173.2px;
+      width: 50%;
+      left: 25%;
+    }
+    
+    .row--middle-top .shape {
+      width: 50%;
+    }
+    
+    .shape--upper-left {
+      clip-path: polygon(100% 100%, 0 100%, 50% 0, 100% 0);
+    }
+    
+    .shape--upper-right {
+      clip-path: polygon(100% 100%, 0 100%, 0 0, 50% 0);
+    }
+    
+    /* Top row */
+    .row--top {
+      bottom: 259.8px;
+      width: 25%;
+      left: 37.5%;
+    }
+    
+    .row--top .shape {
+      width: 100%;
+    }
+    
+    .shape--top {
+      clip-path: polygon(0 100%, 50% 0, 100% 100%);
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-text">Scroll down to build the pyramid</div>
+  
+  <div class="pyramid-container">
+    <!-- Bottom row -->
+    <div class="row row--bottom">
+      <div class="shape shape--bottom-left"></div>
+      <div class="shape shape--bottom-center"></div>
+      <div class="shape shape--bottom-center"></div>
+      <div class="shape shape--bottom-right"></div>
+    </div>
+
+    <!-- Middle-bottom row -->
+    <div class="row row--middle-bottom">
+      <div class="shape shape--middle-left"></div>
+      <div class="shape shape--middle-center"></div>
+      <div class="shape shape--middle-right"></div>
+    </div>
+
+    <!-- Middle-top row -->
+    <div class="row row--middle-top">
+      <div class="shape shape--upper-left"></div>
+      <div class="shape shape--upper-right"></div>
+    </div>
+
+    <!-- Top row -->
+    <div class="row row--top">
+      <div class="shape shape--top"></div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+      
+      const shapes = document.querySelectorAll('.shape');
+      const scrollText = document.querySelector('.scroll-text');
+      const startPoint = 0;
+      const endPoint = window.innerHeight * 1.5;
+      
+      // Initial positions for shapes (off-screen)
+      const initialPositions = [
+        // Bottom row
+        { x: -400, y: 200 },  // bottom-left
+        { x: -200, y: 200 },  // bottom-center 1
+        { x: 200, y: 200 },   // bottom-center 2
+        { x: 400, y: 200 },   // bottom-right
+        
+        // Middle-bottom row
+        { x: -300, y: 100 },  // middle-left
+        { x: 0, y: 100 },     // middle-center
+        { x: 300, y: 100 },   // middle-right
+        
+        // Middle-top row
+        { x: -200, y: 0 },    // upper-left
+        { x: 200, y: 0 },     // upper-right
+        
+        // Top row
+        { x: 0, y: -100 }     // top
+      ];
+      
+      // Set initial positions
+      shapes.forEach((shape, index) => {
+        const { x, y } = initialPositions[index];
+        shape.style.transform = `translate(${x}px, ${y}px) rotateX(${Math.random() * 40 - 20}deg) rotateY(${Math.random() * 40 - 20}deg)`;
+      });
+      
+      // Animation function
+      function updateAnimation() {
+        const scrollPosition = window.pageYOffset;
+        const progress = Math.min(1, Math.max(0, (scrollPosition - startPoint) / (endPoint - startPoint)));
+        
+        scrollText.textContent = `Construction Progress: ${Math.round(progress * 100)}%`;
+        
+        shapes.forEach((shape, index) => {
+          const pieceDelay = index * 0.08;
+          const pieceProgress = Math.min(1, Math.max(0, (progress - pieceDelay) / (1 - pieceDelay) * 1.2));
+          
+          if (pieceProgress > 0) {
+            const { x, y } = initialPositions[index];
+            const translateX = x * (1 - pieceProgress);
+            const translateY = y * (1 - pieceProgress);
+            
+            let transform = `translate(${translateX}px, ${translateY}px)`;
+            
+            if (pieceProgress < 0.9) {
+              transform += ` rotateX(${Math.random() * 40 - 20}deg) rotateY(${Math.random() * 40 - 20}deg)`;
+            }
+            
+            if (pieceProgress > 0.9) {
+              const bounce = Math.sin((pieceProgress - 0.9) * 10 * Math.PI) * 8 * (1 - (pieceProgress - 0.9) * 10);
+              transform = `translate(${translateX}px, ${translateY + bounce}px)`;
+            }
+            
+            shape.style.transform = transform;
+          }
+        });
+      }
+      
+      // Debounced scroll handler
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            updateAnimation();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+      
+      // Initial animation state
+      updateAnimation();
+    })();
+  </script>
+</body>
+</html>
