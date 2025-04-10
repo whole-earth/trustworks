@@ -32,7 +32,7 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 0 4rem;
         }
 
         .hero-section {
@@ -45,11 +45,27 @@
 
         .waves {
             position: absolute;
-            right: 0;
+            right: 2rem; /* match the margin of body */
+            top: 40%;
+            height: 500px;
+            transform: translateY(-50%);
+            width: 50vw;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .waves-overlay {
+            position: absolute;
             top: 0;
-            width: 50%;
+            left: 0;
+            right: 0;
             bottom: 0;
-            z-index: 1;
+            pointer-events: none;
+            --bg: #FDFAF3;
+            background: linear-gradient(to right, var(--bg) 0%, transparent 10%),
+                        linear-gradient(to left, var(--bg) 0%, transparent 10%),
+                        linear-gradient(to bottom, var(--bg) 0%, transparent 10%),
+                        linear-gradient(to top, var(--bg) 0%, transparent 10%);
         }
 
         .hero-content {
@@ -85,25 +101,54 @@
         .main-content {
             display: flex;
             gap: 4rem;
-            margin-top: 2rem;
+            margin-bottom: 20vh;
             position: relative;
             z-index: 2;
-            background: #FDFAF3;
         }
 
         .left-column {
             flex: 1;
             position: sticky;
-            top: 100px;
-            height: fit-content;
+            top: 0;
+            padding: 100px 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .section-titles {
+            background: rgba(253, 250, 243, 0.9);
+            padding: 1rem;
+            margin-top: auto;
+        }
+
+        .section-titles h3 {
+            font-size: 1.2rem;
+            color: #195019;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .section-titles h3:hover {
+            opacity: 0.8;
+        }
+
+        .section-titles h3.active {
+            text-decoration: underline;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 4px;
         }
 
         .right-column {
             flex: 1;
+            margin-top: 60vh;
+            margin-bottom: 80vh;
         }
 
-        .section {
-            margin-bottom: 4rem;
+        .right-column .section:not(:last-child) {
+            margin-bottom: 12rem;
         }
 
         .section h2 {
@@ -126,7 +171,7 @@
         }
 
         .service-list li::before {
-            content: "○";
+            content: "•";
             margin-right: 0.5rem;
             color: #195019;
         }
@@ -146,16 +191,17 @@
         }
 
         .circle-graphic {
-            width: 300px;
-            height: 300px;
-            margin: 2rem 0;
+            position: absolute;
+            bottom: 14vh;
+            left: -6vw;
+            width: 400px;
+            height: 400px;
+            transform: scale(1.3);
             border: none;
             background: transparent;
+            opacity: 0.2;
         }
 
-        .strategy-section {
-            margin-top: 4rem;
-        }
     </style>
 </head>
 <body>
@@ -166,7 +212,9 @@
     </nav>
 
     <section class="hero-section">
-        <div class="waves"></div>
+        <div class="waves">
+            <div class="waves-overlay"></div>
+        </div>
         <div class="hero-content">
             <h1>Solutions Built for Healthcare Leaders, by Industry Experts</h1>
             <p>Trust Us to Eliminate the Noise, from Boardroom to Bedside</p>
@@ -177,10 +225,16 @@
     <div class="container">
         <div class="main-content">
             <div class="left-column">
-                <div class="strategy-section">
+                <div class="section">
                     <h2>From Strategy to Impact</h2>
                     <p>As former healthcare executives and operational leaders, we focus on delivering actionable, measurable strategies that drive progress, creating immediate impact and building a foundation for the future.</p>
                     <iframe src="ring.html" class="circle-graphic" scrolling="no"></iframe>
+                </div>
+                <div class="section-titles">
+                    <h3>Integrated Organizational Design</h3>
+                    <h3>Care Model Innovation</h3>
+                    <h3>Sustainable & Resilient Economics</h3>
+                    <h3>Corporate Services</h3>
                 </div>
             </div>
 
@@ -248,17 +302,17 @@
 
     <script>
         const config = {
-            pointSize: 3.5,
+            pointSize: 5,
             colors: {
                 start: { r: 0.1, g: 0.5, b: 0.1, a: 1 },    // Darker green
                 end: { r: 0, g: 0.9, b: 0.2, a: 1 }         // Brighter green
             },
             backgroundColor: { r: 0.992, g: 0.98, b: 0.953 }, // #FDFAF3 in RGB
-            speed: 2,
-            waveHeight: 1.5,
-            wavePeaks: 4,
+            speed: 1.1,
+            waveHeight: 6,
+            wavePeaks: 3,
             pointDensity: 5,
-            waveDepth: 200
+            waveDepth: 300
         }
 
         const pointSize = config.pointSize
@@ -320,7 +374,7 @@
             onResize(w, h, dpi) {
                 const position = [], color = []
 
-                const width = 400 * (w / h)
+                const width = 100 * (w / h)
                 const depth = config.waveDepth
                 const height = config.waveHeight
                 const distance = config.pointDensity
@@ -345,8 +399,49 @@
                 this.buffers.color = color
 
                 this.uniforms.size = (h / 400) * pointSize * dpi
-            },
+            }
         })
+
+        // Add scroll detection functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const sectionHeaders = document.querySelectorAll('.right-column .section h2');
+            const sectionTitles = document.querySelectorAll('.section-titles h3');
+            
+            function updateActiveSection() {
+                const viewportHeight = window.innerHeight;
+                const viewportMiddle = window.scrollY + (viewportHeight / 2);
+                
+                sectionHeaders.forEach((header, index) => {
+                    const headerTop = header.getBoundingClientRect().top + window.scrollY;
+                    
+                    if (headerTop <= viewportMiddle) {
+                        sectionTitles.forEach(title => title.classList.remove('active'));
+                        sectionTitles[index].classList.add('active');
+                    }
+                });
+            }
+
+            // Add click handlers to section titles
+            sectionTitles.forEach((title, index) => {
+                title.addEventListener('click', () => {
+                    const targetSection = sectionHeaders[index].parentElement;
+                    const offset = 6 * 16; // Convert 6rem to pixels (assuming 16px = 1rem)
+                    const elementPosition = targetSection.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.scrollY - offset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Initial check
+            updateActiveSection();
+            
+            // Update on scroll
+            window.addEventListener('scroll', updateActiveSection);
+        });
     </script>
 </body>
 </html>
